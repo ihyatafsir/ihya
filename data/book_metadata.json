@@ -1,0 +1,314 @@
+{
+  "vol1_Vol1-book-1.doc": {
+    "id": "vol1_Vol1-book-1.doc",
+    "original_file": "vol1_Vol1-book-1.doc.txt",
+    "vol": 1,
+    "arabic_title": "كتاب العلم",
+    "english_title": "Book of Knowledge",
+    "global_id": 1
+  },
+  "vol1_Vol1-book-10.doc": {
+    "id": "vol1_Vol1-book-10.doc",
+    "original_file": "vol1_Vol1-book-10.doc.txt",
+    "vol": 1,
+    "arabic_title": "كتاب ترتيب الأوراد وتفصيل إحياء الليل",
+    "english_title": "Arrangement of Litanies",
+    "global_id": 10
+  },
+  "vol1_Vol1-book-2.doc": {
+    "id": "vol1_Vol1-book-2.doc",
+    "original_file": "vol1_Vol1-book-2.doc.txt",
+    "vol": 1,
+    "arabic_title": "كتاب إحياء علوم الدين",
+    "english_title": "Foundations of Belief",
+    "global_id": 2
+  },
+  "vol1_Vol1-book-3.doc": {
+    "id": "vol1_Vol1-book-3.doc",
+    "original_file": "vol1_Vol1-book-3.doc.txt",
+    "vol": 1,
+    "arabic_title": "كتاب أسرار الطهارة",
+    "english_title": "Mysteries of Purity",
+    "global_id": 3
+  },
+  "vol1_Vol1-book-4.doc": {
+    "id": "vol1_Vol1-book-4.doc",
+    "original_file": "vol1_Vol1-book-4.doc.txt",
+    "vol": 1,
+    "arabic_title": "كتاب أسرار الصلاة ومهماتها",
+    "english_title": "Secrets of Prayer",
+    "global_id": 4
+  },
+  "vol1_Vol1-book-5.doc": {
+    "id": "vol1_Vol1-book-5.doc",
+    "original_file": "vol1_Vol1-book-5.doc.txt",
+    "vol": 1,
+    "arabic_title": "كتاب أسرار الزكاة",
+    "english_title": "Secrets of Zakat",
+    "global_id": 5
+  },
+  "vol1_Vol1-book-6.doc": {
+    "id": "vol1_Vol1-book-6.doc",
+    "original_file": "vol1_Vol1-book-6.doc.txt",
+    "vol": 1,
+    "arabic_title": "كتاب أسرار الصوم",
+    "english_title": "Secrets of Fasting",
+    "global_id": 6
+  },
+  "vol1_Vol1-book-7.doc": {
+    "id": "vol1_Vol1-book-7.doc",
+    "original_file": "vol1_Vol1-book-7.doc.txt",
+    "vol": 1,
+    "arabic_title": "كتاب أسرار الحج",
+    "english_title": "Secrets of Hajj",
+    "global_id": 7
+  },
+  "vol1_Vol1-book-8.doc": {
+    "id": "vol1_Vol1-book-8.doc",
+    "original_file": "vol1_Vol1-book-8.doc.txt",
+    "vol": 1,
+    "arabic_title": "كتاب آداب تلاوة القرآن",
+    "english_title": "Etiquette of Quran Recitation",
+    "global_id": 8
+  },
+  "vol1_Vol1-book-9.doc": {
+    "id": "vol1_Vol1-book-9.doc",
+    "original_file": "vol1_Vol1-book-9.doc.txt",
+    "vol": 1,
+    "arabic_title": "كتاب الأذكار والدعوات",
+    "english_title": "Invocations and Supplications",
+    "global_id": 9
+  },
+  "vol2_j2-k01.doc": {
+    "id": "vol2_j2-k01.doc",
+    "original_file": "vol2_j2-k01.doc.txt",
+    "vol": 2,
+    "arabic_title": "كتاب آداب الأكل",
+    "english_title": "Etiquette of Eating",
+    "global_id": 11
+  },
+  "vol2_j2-k02.doc": {
+    "id": "vol2_j2-k02.doc",
+    "original_file": "vol2_j2-k02.doc.txt",
+    "vol": 2,
+    "arabic_title": "كتاب آداب النكاح",
+    "english_title": "Etiquette of Marriage",
+    "global_id": 12
+  },
+  "vol2_j2-k03.doc": {
+    "id": "vol2_j2-k03.doc",
+    "original_file": "vol2_j2-k03.doc.txt",
+    "vol": 2,
+    "arabic_title": "كتاب آداب الكسب والمعاش",
+    "english_title": "Etiquette of Earning a Livelihood",
+    "global_id": 13
+  },
+  "vol2_j2-k04.doc": {
+    "id": "vol2_j2-k04.doc",
+    "original_file": "vol2_j2-k04.doc.txt",
+    "vol": 2,
+    "arabic_title": "كتاب الحلال والحرام",
+    "english_title": "The Lawful and Prohibited",
+    "global_id": 14
+  },
+  "vol2_j2-k05.doc": {
+    "id": "vol2_j2-k05.doc",
+    "original_file": "vol2_j2-k05.doc.txt",
+    "vol": 2,
+    "arabic_title": "كتاب أداب الألفة والأخوة والصحبة والمعاشرة مع أصناف الخلق",
+    "english_title": "Etiquette of Companionship",
+    "global_id": 15
+  },
+  "vol2_j2-k06.doc": {
+    "id": "vol2_j2-k06.doc",
+    "original_file": "vol2_j2-k06.doc.txt",
+    "vol": 2,
+    "arabic_title": "كتاب آداب العزلة",
+    "english_title": "Etiquette of Seclusion",
+    "global_id": 16
+  },
+  "vol2_j2-k07.doc": {
+    "id": "vol2_j2-k07.doc",
+    "original_file": "vol2_j2-k07.doc.txt",
+    "vol": 2,
+    "arabic_title": "كتاب آداب السفر",
+    "english_title": "Etiquette of Travel",
+    "global_id": 17
+  },
+  "vol2_j2-k08.doc": {
+    "id": "vol2_j2-k08.doc",
+    "original_file": "vol2_j2-k08.doc.txt",
+    "vol": 2,
+    "arabic_title": "كتاب آداب السماع والوجد",
+    "english_title": "Etiquette of Sama and Wajd",
+    "global_id": 18
+  },
+  "vol2_j2-k09.doc": {
+    "id": "vol2_j2-k09.doc",
+    "original_file": "vol2_j2-k09.doc.txt",
+    "vol": 2,
+    "arabic_title": "كتاب الأمر بالمعروف والنهي عن المنكر",
+    "english_title": "Enjoining Good and Forbidding Evil",
+    "global_id": 19
+  },
+  "vol2_j2-k10.doc": {
+    "id": "vol2_j2-k10.doc",
+    "original_file": "vol2_j2-k10.doc.txt",
+    "vol": 2,
+    "arabic_title": "كتاب آداب المعيشة وأخلاق النبوة",
+    "english_title": "Prophetic Mannerisms",
+    "global_id": 20
+  },
+  "vol3_Vol3-book-10a.doc": {
+    "id": "vol3_Vol3-book-10a.doc",
+    "original_file": "vol3_Vol3-book-10a.doc.txt",
+    "vol": 3,
+    "arabic_title": "كتاب ذم الغرور",
+    "english_title": "Condemnation of Self-Delusion",
+    "global_id": 30
+  },
+  "vol3_Vol3-book-6a.doc": {
+    "id": "vol3_Vol3-book-6a.doc",
+    "original_file": "vol3_Vol3-book-6a.doc.txt",
+    "vol": 3,
+    "arabic_title": "كتاب ذم الدنيا",
+    "english_title": "Condemnation of the World",
+    "global_id": 26
+  },
+  "vol3_Vol3-book-7a.doc": {
+    "id": "vol3_Vol3-book-7a.doc",
+    "original_file": "vol3_Vol3-book-7a.doc.txt",
+    "vol": 3,
+    "arabic_title": "كتاب ذم البخل وذم حب المال",
+    "english_title": "Condemnation of Miserliness",
+    "global_id": 27
+  },
+  "vol3_Vol3-book-8a.doc": {
+    "id": "vol3_Vol3-book-8a.doc",
+    "original_file": "vol3_Vol3-book-8a.doc.txt",
+    "vol": 3,
+    "arabic_title": "كتاب ذم الجاه والرياء",
+    "english_title": "Condemnation of Status and Ostentation",
+    "global_id": 28
+  },
+  "vol3_Vol3-book-9a.doc": {
+    "id": "vol3_Vol3-book-9a.doc",
+    "original_file": "vol3_Vol3-book-9a.doc.txt",
+    "vol": 3,
+    "arabic_title": "كتاب ذم الكبر والعجب",
+    "english_title": "Condemnation of Pride and Conceit",
+    "global_id": 29
+  },
+  "vol3_Vol3-book2a.doc": {
+    "id": "vol3_Vol3-book2a.doc",
+    "original_file": "vol3_Vol3-book2a.doc.txt",
+    "vol": 3,
+    "arabic_title": "كتاب رياضة النفس وتهذيب الأخلاق",
+    "english_title": "Disciplining the Soul",
+    "global_id": 22
+  },
+  "vol3_Vol3-book3a.doc": {
+    "id": "vol3_Vol3-book3a.doc",
+    "original_file": "vol3_Vol3-book3a.doc.txt",
+    "vol": 3,
+    "arabic_title": "كتاب كسر الشهوتين",
+    "english_title": "Breaking the Two Desires",
+    "global_id": 23
+  },
+  "vol3_Vol3-book4a.doc": {
+    "id": "vol3_Vol3-book4a.doc",
+    "original_file": "vol3_Vol3-book4a.doc.txt",
+    "vol": 3,
+    "arabic_title": "كتاب آفات اللسان",
+    "english_title": "Harms of the Tongue",
+    "global_id": 24
+  },
+  "vol3_Vol3-book5a.doc": {
+    "id": "vol3_Vol3-book5a.doc",
+    "original_file": "vol3_Vol3-book5a.doc.txt",
+    "vol": 3,
+    "arabic_title": "كتاب ذم الغضب والحقد والحسد",
+    "english_title": "Condemnation of Anger and Envy",
+    "global_id": 25
+  },
+  "vol3_j3-k01.doc": {
+    "id": "vol3_j3-k01.doc",
+    "original_file": "vol3_j3-k01.doc.txt",
+    "vol": 3,
+    "arabic_title": "كتاب شرح عجائب القلب",
+    "english_title": "Wonders of the Heart",
+    "global_id": 21
+  },
+  "vol4_Vol4-book10.doc": {
+    "id": "vol4_Vol4-book10.doc",
+    "original_file": "vol4_Vol4-book10.doc.txt",
+    "vol": 4,
+    "arabic_title": "كتاب ذ",
+    "english_title": "Condemnation of Anger and Envy",
+    "global_id": 25
+  },
+  "vol4_Vol4-book2.doc": {
+    "id": "vol4_Vol4-book2.doc",
+    "original_file": "vol4_Vol4-book2.doc.txt",
+    "vol": 4,
+    "arabic_title": "كتاب الصبر والشكر",
+    "english_title": "Patience and Gratitude",
+    "global_id": 32
+  },
+  "vol4_Vol4-book3.doc": {
+    "id": "vol4_Vol4-book3.doc",
+    "original_file": "vol4_Vol4-book3.doc.txt",
+    "vol": 4,
+    "arabic_title": "كتاب الخوف والرجاء",
+    "english_title": "Fear and Hope",
+    "global_id": 33
+  },
+  "vol4_Vol4-book4.doc": {
+    "id": "vol4_Vol4-book4.doc",
+    "original_file": "vol4_Vol4-book4.doc.txt",
+    "vol": 4,
+    "arabic_title": "كتاب الفقر والزهد",
+    "english_title": "Poverty and Abstinence",
+    "global_id": 34
+  },
+  "vol4_Vol4-book5.doc": {
+    "id": "vol4_Vol4-book5.doc",
+    "original_file": "vol4_Vol4-book5.doc.txt",
+    "vol": 4,
+    "arabic_title": "كتاب التوحيد والتوكل",
+    "english_title": "Tawhid and Trust",
+    "global_id": 35
+  },
+  "vol4_Vol4-book6.doc": {
+    "id": "vol4_Vol4-book6.doc",
+    "original_file": "vol4_Vol4-book6.doc.txt",
+    "vol": 4,
+    "arabic_title": "كتاب المحبة والشوق والأنس والرضا",
+    "english_title": "Love, Longing, and Intimacy",
+    "global_id": 36
+  },
+  "vol4_j4-k07-old.doc": {
+    "id": "vol4_j4-k07-old.doc",
+    "original_file": "vol4_j4-k07-old.doc.txt",
+    "vol": 4,
+    "arabic_title": "كتاب النية والإخلاص والصدق",
+    "english_title": "Intention, Sincerity, and Truthfulness",
+    "global_id": 37
+  },
+  "vol4_j4-k08.doc": {
+    "id": "vol4_j4-k08.doc",
+    "original_file": "vol4_j4-k08.doc.txt",
+    "vol": 4,
+    "arabic_title": "كتاب المراقبة والمحاسبة",
+    "english_title": "Watchfulness and Self-Examination",
+    "global_id": 38
+  },
+  "vol4_j4-k09.doc": {
+    "id": "vol4_j4-k09.doc",
+    "original_file": "vol4_j4-k09.doc.txt",
+    "vol": 4,
+    "arabic_title": "كتاب التفكر",
+    "english_title": "Meditation",
+    "global_id": 39
+  }
+}

@@ -1,75 +1,184 @@
 import fs from 'fs';
 import path from 'path';
-import { Book, ProcessedBook, Verse } from './types';
+import { Book, Verse, BookMetadata } from './types';
 
-// Data is in ../../../data/processed relative to this file (web/lib/api.ts) -> web/lib/../.. -> web/.. -> ihyatafsir/data
-// But actually path resolution in Next.js server components can be tricky.
-// Better to use absolute path or process.cwd()
-// process.cwd() in Next.js is usually the project root (web).
-// So data is at ../data/processed
+const DATA_DIR = path.join(process.cwd(), '..', 'data');
+const PROCESSED_DIR = path.join(DATA_DIR, 'processed');
+const TRANSLATIONS_DIR = path.join(DATA_DIR, 'translations');
 
-const DATA_DIR = path.join(process.cwd(), '../data/processed');
+export interface TafsirMatch {
+    book_id: string;
+    vol: number;
+    word_start: number;
+    word_end: number;
+    verse_in_text: string;
+    translation: string;
+}
 
-export function getBooks(): Book[] {
-    if (!fs.existsSync(DATA_DIR)) return [];
+export interface Ayah {
+    text: string;
+    matches: TafsirMatch[];
+}
 
-    const files = fs.readdirSync(DATA_DIR);
-    // We look for .txt files as the main entry, assuming corresponding .json exists
-    // Format: vol{vol}_Vol{V}-book-{N}.doc.txt
+export interface Surah {
+    name: string;
+    tname: string;
+    ename: string;
+    ayahs: number;
+    verses: Record<string, Ayah>;
+}
 
-    const books: Book[] = [];
+export type TafsirIndex = Record<string, Surah>;
 
-    files.forEach(file => {
-        if (file.endsWith('.txt')) {
-            const id = file.replace('.doc.txt', '').replace('.txt', ''); // Normalize id
-            // Extract vol number
-            const volMatch = file.match(/vol(\d+)_/);
-            const vol = volMatch ? parseInt(volMatch[1]) : 0;
+let cachedIndex: TafsirIndex | null = null;
 
-            // Extract nice title
-            // vol1_Vol1-book-1 -> Book 1 (Vol 1)
-            const bookNumMatch = file.match(/book-(\d+)/);
-            const bookNum = bookNumMatch ? bookNumMatch[1] : '?';
+export function getTafsirIndex(): TafsirIndex {
+    if (cachedIndex) return cachedIndex;
+    const indexPath = path.join(DATA_DIR, 'quran_tafsir_index.json');
+    if (!fs.existsSync(indexPath)) return {};
+    const data = fs.readFileSync(indexPath, 'utf-8');
+    cachedIndex = JSON.parse(data);
+    return cachedIndex!;
+}
 
-            books.push({
-                id,
-                title: `Book ${bookNum} (Vol ${vol})`,
-                vol,
-                path: file
+let cachedMetadata: Record<string, any> | null = null;
+export function getMetadata(): Record<string, any> {
+    if (cachedMetadata) return cachedMetadata;
+    const metadataPath = path.join(DATA_DIR, 'book_metadata.json');
+    if (!fs.existsSync(metadataPath)) return {};
+    cachedMetadata = JSON.parse(fs.readFileSync(metadataPath, 'utf-8'));
+    return cachedMetadata!;
+}
+
+let cachedTranslations: Record<string, string> | null = null;
+export function getQuranTranslation(surah: number | string, ayah: number | string): string {
+    if (!cachedTranslations) {
+        const transPath = path.join(TRANSLATIONS_DIR, 'abdel_haleem.txt');
+        if (fs.existsSync(transPath)) {
+            const lines = fs.readFileSync(transPath, 'utf-8').split('\n');
+            cachedTranslations = {};
+            lines.forEach(line => {
+                const parts = line.split('|');
+                if (parts.length >= 3) {
+                    cachedTranslations![`${parts[0]}:${parts[1]}`] = parts[2];
+                }
             });
+        } else {
+            return '';
         }
+    }
+    return cachedTranslations[`${surah}:${ayah}`] || '';
+}
+
+export function getSurahs() {
+    const index = getTafsirIndex();
+    return Object.entries(index).map(([id, surah]) => {
+        let matchesCount = 0;
+        Object.values(surah.verses).forEach(v => {
+            matchesCount += v.matches.length;
+        });
+        return {
+            id,
+            name: surah.name,
+            ename: surah.ename,
+            tname: surah.tname,
+            ayahs: surah.ayahs,
+            matchesCount
+        };
+    });
+}
+
+export function getSurah(id: string): Surah | null {
+    const index = getTafsirIndex();
+    return index[id] || null;
+}
+
+export function getAyah(surahId: string, ayahId: string): Ayah | null {
+    const surah = getSurah(surahId);
+    if (!surah) return null;
+    return surah.verses[ayahId] || null;
+}
+
+export function getSnippet(bookId: string, wordStart: number, wordEnd: number, contextWords: number = 50): string {
+    // Some IDs might come in without .doc, append if missing
+    const fullId = bookId.endsWith('.doc') ? bookId : `${bookId}.doc`;
+    const textPath = path.join(PROCESSED_DIR, `${fullId}.txt`);
+
+    if (!fs.existsSync(textPath)) {
+        console.error(`Snippet file not found: ${textPath}`);
+        return '';
+    }
+
+    try {
+        const rawText = fs.readFileSync(textPath, 'utf-8');
+        // Use a more robust split that matches the Python indexing logic (whitespace)
+        const words = rawText.split(/\s+/);
+
+        const start = Math.max(0, wordStart - contextWords);
+        const end = Math.min(words.length, wordEnd + contextWords);
+
+        const snippet = words.slice(start, end).join(' ');
+        return snippet;
+    } catch (e) {
+        console.error(`Error reading snippet for ${bookId}:`, e);
+        return '';
+    }
+}
+
+export function getBooks(): BookMetadata[] {
+    const metadata = getMetadata();
+    const books = Object.values(metadata).map((m: any) => ({
+        id: m.id,
+        title: m.english_title || m.id,
+        arabic_title: m.arabic_title,
+        vol: m.vol
+    }));
+
+    if (books.length > 0) return books.sort((a, b) => {
+        if (a.vol !== b.vol) return a.vol - b.vol;
+        return a.id.localeCompare(b.id, undefined, { numeric: true });
     });
 
-    // Sort by Vol then Book
-    return books.sort((a, b) => {
+    // Fallback if metadata.json is missing
+    if (!fs.existsSync(PROCESSED_DIR)) return [];
+    const files = fs.readdirSync(PROCESSED_DIR);
+    const bookFiles = files.filter(f => f.endsWith('_verses.json'));
+
+    return bookFiles.map(f => {
+        const id = f.replace('_verses.json', '');
+        const parts = id.split('_');
+        const vol = parts[0].replace('vol', '');
+        return {
+            id,
+            title: parts.slice(1).join(' ').replace('.doc', ''),
+            vol: parseInt(vol)
+        };
+    }).sort((a, b) => {
         if (a.vol !== b.vol) return a.vol - b.vol;
-        // Extract book num again for sorting or strict string compare
         return a.id.localeCompare(b.id, undefined, { numeric: true });
     });
 }
 
-export function getBook(id: string): ProcessedBook | null {
-    const txtPath = path.join(DATA_DIR, `${id}.doc.txt`);
-    const jsonPath = path.join(DATA_DIR, `${id}.doc_verses.json`);
+export function getBook(id: string): Book | null {
+    const metadataAll = getMetadata();
+    const bookMetadata = metadataAll[id];
 
-    if (!fs.existsSync(txtPath)) {
-        // Try without .doc if normalization changed
-        const txtPathAlt = path.join(DATA_DIR, `${id}.txt`);
-        if (!fs.existsSync(txtPathAlt)) return null;
-        // ... would need to handle alt path
+    const metadataPath = path.join(PROCESSED_DIR, `${id}_verses.json`);
+    const textPath = path.join(PROCESSED_DIR, `${id}.txt`);
+
+    if (!fs.existsSync(metadataPath) || !fs.existsSync(textPath)) {
+        return null;
     }
 
-    const raw_text = fs.readFileSync(txtPath, 'utf-8');
-    let verses: Verse[] = [];
-
-    if (fs.existsSync(jsonPath)) {
-        const jsonContent = fs.readFileSync(jsonPath, 'utf-8');
-        verses = JSON.parse(jsonContent);
-    }
+    const metadata = JSON.parse(fs.readFileSync(metadataPath, 'utf-8'));
+    const rawText = fs.readFileSync(textPath, 'utf-8');
 
     return {
         id,
-        raw_text,
-        verses
+        title: bookMetadata?.english_title || id,
+        arabic_title: bookMetadata?.arabic_title,
+        vol: bookMetadata?.vol || metadata[0]?.vol || 0,
+        raw_text: rawText,
+        verses: metadata
     };
 }

@@ -8,17 +8,22 @@ export interface Verse {
     text_matched: string; // The Arabic text segment in the book
     translation: string;
     key: string; // "Surah:Ayah"
+    word_start: number;
+    word_end: number;
+}
+
+export interface BookMetadata {
+    id: string;
+    title: string;
+    arabic_title?: string;
+    vol: number;
 }
 
 export interface Book {
     id: string;
     title: string;
+    arabic_title?: string;
     vol: number;
-    path: string;
-}
-
-export interface ProcessedBook {
-    id: string;
     raw_text: string;
     verses: Verse[];
 }
