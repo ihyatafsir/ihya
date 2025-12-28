@@ -2,15 +2,17 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Verse } from '../../../lib/types';
+import { Verse, BookStructure } from '../../lib/types';
 
 interface ReaderTextProps {
     tokens: string[];
     verseMap: Record<number, Verse[]>;
+    structure?: BookStructure | null;
 }
 
-export default function ReaderText({ tokens, verseMap }: ReaderTextProps) {
-    const [activeVerse, setActiveVerse] = useState<{ translation: string, key: string } | null>(null);
+export default function ReaderText({ tokens, verseMap, structure }: ReaderTextProps) {
+    const [activeVerse, setActiveVerse] = useState<{ translation: string, key: string, word_start: number, word_end: number } | null>(null);
+    const [isTocOpen, setIsTocOpen] = useState(false);
     const searchParams = useSearchParams();
     const wordRefs = useRef<(HTMLSpanElement | null)[]>([]);
 
@@ -18,21 +20,24 @@ export default function ReaderText({ tokens, verseMap }: ReaderTextProps) {
         const targetWordIndex = searchParams.get('word');
         if (targetWordIndex !== null) {
             const index = parseInt(targetWordIndex);
-            // Give a small delay to ensure rendering and refs are ready
-            const timer = setTimeout(() => {
-                const el = wordRefs.current[index];
-                if (el) {
-                    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    // Add a brief highlight flash
-                    el.classList.add('ring-4', 'ring-gold-premium', 'bg-gold-premium/10');
-                    setTimeout(() => {
-                        el.classList.remove('ring-4', 'ring-gold-premium', 'bg-gold-premium/10');
-                    }, 2000);
-                }
-            }, 500);
-            return () => clearTimeout(timer);
+            scrollToWord(index);
         }
     }, [searchParams]);
+
+    const scrollToWord = (index: number) => {
+        // Give a small delay to ensure rendering and refs are ready
+        setTimeout(() => {
+            const el = wordRefs.current[index];
+            if (el) {
+                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                // Add a brief highlight flash
+                el.classList.add('ring-4', 'ring-gold-premium', 'bg-gold-premium/10');
+                setTimeout(() => {
+                    el.classList.remove('ring-4', 'ring-gold-premium', 'bg-gold-premium/10');
+                }, 2000);
+            }
+        }, 100);
+    };
 
     // Pre-calculate which verse each word belongs to
     const wordToVerseMap: Record<number, Verse> = {};
@@ -44,6 +49,58 @@ export default function ReaderText({ tokens, verseMap }: ReaderTextProps) {
 
     return (
         <div className="relative">
+            {/* Table of Contents Trigger */}
+            {structure && structure.chapters.length > 0 && (
+                <button
+                    onClick={() => setIsTocOpen(true)}
+                    className="fixed left-8 top-1/2 -translate-y-1/2 bg-white/80 backdrop-blur-md border border-stone-200 p-4 rounded-full shadow-lg hover:shadow-2xl hover:scale-110 transition-all z-[60] flex flex-col items-center gap-1 group"
+                    title="Table of Contents"
+                >
+                    <div className="w-6 h-0.5 bg-emerald-deep rounded-full transition-all group-hover:w-8"></div>
+                    <div className="w-8 h-0.5 bg-emerald-deep rounded-full"></div>
+                    <div className="w-6 h-0.5 bg-emerald-deep rounded-full transition-all group-hover:w-8"></div>
+                    <span className="text-[8px] uppercase tracking-widest font-black text-emerald-deep mt-1">ToC</span>
+                </button>
+            )}
+
+            {/* Table of Contents Sidebar */}
+            {isTocOpen && (
+                <div className="fixed inset-0 z-[100] flex animate-in fade-in duration-300">
+                    <div className="absolute inset-0 bg-stone-900/40 backdrop-blur-sm" onClick={() => setIsTocOpen(false)}></div>
+                    <aside className="relative w-full max-w-sm bg-stone-50 h-full shadow-2xl animate-in slide-in-from-left duration-500 overflow-y-auto">
+                        <div className="p-8 border-b border-stone-200 sticky top-0 bg-stone-50 z-10 flex justify-between items-center">
+                            <div>
+                                <h3 className="text-2xl font-serif font-black text-stone-800">Contents</h3>
+                                <p className="text-xs text-stone-500 uppercase tracking-widest font-bold mt-1">Ihya Structural Index</p>
+                            </div>
+                            <button onClick={() => setIsTocOpen(false)} className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-stone-200 transition-colors">
+                                ✕
+                            </button>
+                        </div>
+                        <div className="p-4 space-y-2">
+                            {structure?.chapters.map((chapter, i) => (
+                                <button
+                                    key={i}
+                                    onClick={() => {
+                                        scrollToWord(chapter.word_start);
+                                        setIsTocOpen(false);
+                                    }}
+                                    className="w-full text-right p-4 rounded-xl hover:bg-emerald-deep/5 hover:border-emerald-deep/20 border border-transparent transition-all group"
+                                    dir="rtl"
+                                >
+                                    <span className="block text-stone-500 text-[10px] uppercase tracking-widest font-bold mb-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        Jump to Section
+                                    </span>
+                                    <span className="arabic-text text-xl text-stone-700 leading-tight group-hover:text-emerald-deep transition-colors">
+                                        {chapter.title}
+                                    </span>
+                                </button>
+                            ))}
+                        </div>
+                    </aside>
+                </div>
+            )}
+
             <div className="arabic-text leading-[2.5] text-4xl text-stone-800 text-justify tracking-wide" dir="rtl">
                 {tokens.map((token, index) => {
                     const versesStartingHere = verseMap[index];
@@ -59,7 +116,9 @@ export default function ReaderText({ tokens, verseMap }: ReaderTextProps) {
                                 if (verseAtThisWord) {
                                     setActiveVerse({
                                         translation: verseAtThisWord.translation,
-                                        key: verseAtThisWord.key
+                                        key: verseAtThisWord.key,
+                                        word_start: verseAtThisWord.word_start,
+                                        word_end: verseAtThisWord.word_end
                                     });
                                 }
                             }}
@@ -112,7 +171,7 @@ export default function ReaderText({ tokens, verseMap }: ReaderTextProps) {
                         <div className="border-t border-stone-100 pt-6">
                             <div className="text-[10px] uppercase tracking-widest text-emerald-deep font-bold mb-2">Ihya Commentary Snippet</div>
                             <p className="arabic-text text-xl text-stone-600 leading-relaxed text-right" dir="rtl">
-                                ...{tokens.slice(Math.max(0, wordToVerseMap[parseInt(searchParams.get('word') || '0')]?.word_start || 0), (wordToVerseMap[parseInt(searchParams.get('word') || '0')]?.word_end || 0) + 1).join(' ')}...
+                                ...{tokens.slice(activeVerse.word_start, activeVerse.word_end + 1).join(' ')}...
                             </p>
                         </div>
                     </div>

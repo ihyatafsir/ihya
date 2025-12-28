@@ -7,7 +7,7 @@ export default function Sidebar() {
     const pathname = usePathname();
 
     const links = [
-        { href: '/', label: 'Surah Index', icon: '📖' },
+        { href: '/', label: 'Ihya Tafsir', icon: '📖' },
         { href: '/books', label: 'Ihya Books', icon: '📚' },
         // { href: '/search', label: 'Search', icon: '🔍' },
     ];

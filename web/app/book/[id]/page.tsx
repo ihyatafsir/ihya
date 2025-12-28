@@ -1,4 +1,4 @@
-import { getBook, getBooks } from '../../../lib/api';
+import { getBook, getBooks, getBookStructure } from '../../../lib/api';
 import Link from 'next/link';
 import { Suspense } from 'react';
 import ReaderText from '../../components/ReaderText';
@@ -14,6 +14,7 @@ export async function generateStaticParams() {
 export default async function BookPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
     const book = getBook(id);
+    const structure = getBookStructure(id);
 
     if (!book) {
         return (
@@ -55,7 +56,7 @@ export default async function BookPage({ params }: { params: Promise<{ id: strin
             <main className="max-w-4xl mx-auto mt-16 px-6 sm:px-12">
                 <article className="prose prose-stone lg:prose-xl mx-auto">
                     <Suspense fallback={<div className="text-center font-serif text-stone-400">Loading text...</div>}>
-                        <ReaderText tokens={tokens} verseMap={verseMap} />
+                        <ReaderText tokens={tokens} verseMap={verseMap} structure={structure} />
                     </Suspense>
                 </article>
             </main>

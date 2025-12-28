@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { Book, Verse, BookMetadata } from './types';
+import { Book, Verse, BookMetadata, Quarter, PlusEntry } from './types';
 
 const DATA_DIR = path.join(process.cwd(), '..', 'data');
 const PROCESSED_DIR = path.join(DATA_DIR, 'processed');
@@ -135,9 +135,15 @@ export function getBooks(): BookMetadata[] {
     }));
 
     if (books.length > 0) return books.sort((a, b) => {
+        const ga = metadata[a.id]?.global_id;
+        const gb = metadata[b.id]?.global_id;
+        if (ga !== undefined && gb !== undefined) return ga - gb;
         if (a.vol !== b.vol) return a.vol - b.vol;
         return a.id.localeCompare(b.id, undefined, { numeric: true });
-    });
+    }).map(b => ({
+        ...b,
+        global_id: metadata[b.id]?.global_id
+    }));
 
     // Fallback if metadata.json is missing
     if (!fs.existsSync(PROCESSED_DIR)) return [];
@@ -181,4 +187,64 @@ export function getBook(id: string): Book | null {
         raw_text: rawText,
         verses: metadata
     };
+}
+
+let cachedStructure: Record<string, any> | null = null;
+export function getBookStructure(id: string): any | null {
+    if (!cachedStructure) {
+        const structurePath = path.join(DATA_DIR, 'book_structure.json');
+        if (!fs.existsSync(structurePath)) return null;
+        cachedStructure = JSON.parse(fs.readFileSync(structurePath, 'utf-8'));
+    }
+    return cachedStructure![id] || null;
+}
+
+export function getLibraryStructure(): Quarter[] {
+    const books = getBooks();
+
+    const quarters: Quarter[] = [
+        { id: 1, title: "Rub' al-'Ibadat (Acts of Worship)", arabic_title: "ربع العبادات", books: [] },
+        { id: 2, title: "Rub' al-'Adat (Norms of Daily Life)", arabic_title: "ربع العادات", books: [] },
+        { id: 3, title: "Rub' al-Muhlikat (Ways to Perdition)", arabic_title: "ربع المهلكات", books: [] },
+        { id: 4, title: "Rub' al-Munjiyat (Ways to Salvation)", arabic_title: "ربع المنجيات", books: [] }
+    ];
+
+    books.forEach(book => {
+        const gid = book.global_id || 0;
+        if (gid >= 1 && gid <= 10) quarters[0].books.push(book);
+        else if (gid >= 11 && gid <= 20) quarters[1].books.push(book);
+        else if (gid >= 21 && gid <= 30) quarters[2].books.push(book);
+        else if (gid >= 31 && gid <= 40) quarters[3].books.push(book);
+    });
+
+    return quarters;
+}
+
+export function getTafsirPlus(): PlusEntry[] {
+    const index = getTafsirIndex();
+    const result: PlusEntry[] = [];
+
+    Object.entries(index).forEach(([sId, surah]) => {
+        Object.entries(surah.verses).forEach(([aId, ayah]) => {
+            if (ayah.matches.length > 0) {
+                result.push({
+                    surahId: sId,
+                    surahName: surah.name,
+                    surahEname: surah.ename,
+                    ayahId: aId,
+                    ayahText: ayah.text,
+                    translation: getQuranTranslation(sId, aId),
+                    matchesCount: ayah.matches.length
+                });
+            }
+        });
+    });
+
+    // Sort by Surah ID then Ayah ID (numerical)
+    return result.sort((a, b) => {
+        const sidA = parseInt(a.surahId);
+        const sidB = parseInt(b.surahId);
+        if (sidA !== sidB) return sidA - sidB;
+        return parseInt(a.ayahId) - parseInt(b.ayahId);
+    });
 }
